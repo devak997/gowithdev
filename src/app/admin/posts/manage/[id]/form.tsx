@@ -1,6 +1,6 @@
 "use client";
 
-import Editor from "@/components/Editor";
+import EditorComponent from "@/components/Editor";
 import {
   Anchor,
   Box,
@@ -8,6 +8,8 @@ import {
   Button,
   Container,
   Group,
+  Input,
+  InputWrapper,
   Select,
   SimpleGrid,
   Stack,
@@ -22,6 +24,7 @@ import { IconChevronRight } from "@tabler/icons-react";
 import { useForm } from "@mantine/form";
 import { PostFormData } from "./types";
 import { notifications } from "@mantine/notifications";
+import { Editor } from "@tiptap/react";
 
 type Category = {
   value: string;
@@ -35,22 +38,25 @@ interface Props {
 }
 
 function ManagePostForm(props: Readonly<Props>) {
+  const [editorRef, setEditorRef] = React.useState<Editor>();
   const form = useForm<PostFormData>({
     initialValues: props.data ?? {},
   });
 
   const handleSubmit = async (values: PostFormData) => {
-    console.log(form.values);
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/admin/posts`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(values),
-      }
-    );
+    const noOfWords = editorRef!.storage.characterCount.words();
+    const readTimeMillis = Math.ceil(noOfWords / 200) * 60000;
+
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/posts`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        ...values,
+        read_time_millis: readTimeMillis,
+      }),
+    });
 
     if (!response.ok) {
       notifications.show({
@@ -130,13 +136,14 @@ function ManagePostForm(props: Readonly<Props>) {
               {...form.getInputProps("slug")}
             />
           </SimpleGrid>
-          <TextInput
-            key={form.key("content")}
-            component={Editor}
-            label="Content"
-            withAsterisk
-            {...form.getInputProps("content")}
-          />
+          <InputWrapper label="Content" withAsterisk>
+            <Input
+              key={form.key("content")}
+              component={EditorComponent}
+              handleMount={setEditorRef}
+              {...form.getInputProps("content")}
+            />
+          </InputWrapper>
         </Stack>
       </form>
     </Container>

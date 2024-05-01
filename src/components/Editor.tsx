@@ -1,23 +1,30 @@
 "use client";
 import { RichTextEditor, Link } from "@mantine/tiptap";
-import { useEditor } from "@tiptap/react";
+import { Editor, useEditor } from "@tiptap/react";
 import Highlight from "@tiptap/extension-highlight";
 import StarterKit from "@tiptap/starter-kit";
 import Underline from "@tiptap/extension-underline";
 import TextAlign from "@tiptap/extension-text-align";
 import Superscript from "@tiptap/extension-superscript";
 import SubScript from "@tiptap/extension-subscript";
+import { useEffect } from "react";
+import CharacterCount from "@tiptap/extension-character-count";
 
 interface EditorProps {
-  value: string;
+  value?: string;
   onChange?: (value: string) => void;
+  handleMount?: (editor: Editor) => void;
 }
 
 const defaultProps: EditorProps = {
   value: "",
 };
 
-function Editor({ value, onChange }: Readonly<EditorProps> = defaultProps) {
+const EditorComponent: React.FC<Readonly<EditorProps>> = ({
+  value,
+  onChange,
+  handleMount: onMount,
+} = defaultProps) => {
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -27,12 +34,17 @@ function Editor({ value, onChange }: Readonly<EditorProps> = defaultProps) {
       SubScript,
       Highlight,
       TextAlign.configure({ types: ["heading", "paragraph"] }),
+      CharacterCount.configure({}),
     ],
     content: value,
     onUpdate({ editor }) {
       onChange?.(editor.getHTML());
     },
   });
+
+  useEffect(() => {
+    onMount?.(editor!);
+  }, [editor, onMount]);
 
   return (
     <RichTextEditor editor={editor}>
@@ -84,6 +96,6 @@ function Editor({ value, onChange }: Readonly<EditorProps> = defaultProps) {
       <RichTextEditor.Content />
     </RichTextEditor>
   );
-}
+};
 
-export default Editor;
+export default EditorComponent;

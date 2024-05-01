@@ -7,7 +7,7 @@ export const metadata: Metadata = {
 };
 
 const getPosts = async (): Promise<Post[]> => {
-  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/posts`);
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/posts`);
   return response.json();
 };
 

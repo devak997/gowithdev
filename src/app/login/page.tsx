@@ -1,8 +1,9 @@
 "use client";
-import { Button, Container, Stack, TextInput, Title } from "@mantine/core";
+import { Button, Container, Stack, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
 import { IconMail, IconPassword } from "@tabler/icons-react";
+import { useRouter } from "next/navigation";
 
 type LoginData = {
   email: string;
@@ -10,10 +11,11 @@ type LoginData = {
 };
 
 function LoginPage() {
+  const router = useRouter();
   const form = useForm<LoginData>();
 
   const handleSubmit = async (formValue: LoginData) => {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/login`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -35,6 +37,8 @@ function LoginPage() {
       message: "You are now logged in",
       color: "teal",
     });
+
+    router.push("/posts");
   };
 
   return (

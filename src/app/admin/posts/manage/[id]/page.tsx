@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import ManagePostForm from "./form";
 import { PostFormData } from "./types";
+import { cookies } from "next/headers";
 
 export const metadata: Metadata = {
   title: "New Post",
@@ -15,9 +16,11 @@ interface Props {
 const getCategoryOptions = async (): Promise<
   Array<{ id: string; name: string }>
 > => {
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/admin/categories`
-  );
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/categories`, {
+    headers: {
+      cookie: cookies().toString(),
+    },
+  });
 
   return response.json();
 };
@@ -29,13 +32,12 @@ const defaultPost: PostFormData = {
   tags: [],
   content: "",
   slug: "",
+  read_time_millis: 0,
 };
 const getPostInfo = async (id: string): Promise<PostFormData> => {
   if (id === "new") return defaultPost;
 
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/admin/posts/${id}`
-  );
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/posts/${id}`);
 
   if (!response.ok) {
     throw new Error(
