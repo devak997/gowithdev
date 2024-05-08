@@ -47,16 +47,19 @@ function ManagePostForm(props: Readonly<Props>) {
     const noOfWords = editorRef!.storage.characterCount.words();
     const readTimeMillis = Math.ceil(noOfWords / 200) * 60000;
 
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/posts`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        ...values,
-        read_time_millis: readTimeMillis,
-      }),
-    });
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/admin/posts`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          ...values,
+          read_time_millis: readTimeMillis,
+        }),
+      }
+    );
 
     if (!response.ok) {
       notifications.show({
@@ -83,7 +86,7 @@ function ManagePostForm(props: Readonly<Props>) {
         <Group justify="space-between" align="center">
           <Box>
             <Breadcrumbs separator={<IconChevronRight size={16} />}>
-              <Anchor size="sm" href="/posts/manage">
+              <Anchor size="sm" href="/admin/posts/manage">
                 Manage Posts
               </Anchor>
             </Breadcrumbs>
@@ -126,6 +129,7 @@ function ManagePostForm(props: Readonly<Props>) {
               key={form.key("tags")}
               label="Tags"
               placeholder="Enter tags"
+              data={form.values.tags}
               {...form.getInputProps("tags")}
             />
             <TextInput

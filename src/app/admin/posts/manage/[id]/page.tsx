@@ -16,11 +16,14 @@ interface Props {
 const getCategoryOptions = async (): Promise<
   Array<{ id: string; name: string }>
 > => {
-  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/categories`, {
-    headers: {
-      cookie: cookies().toString(),
-    },
-  });
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/admin/categories`,
+    {
+      headers: {
+        cookie: cookies().toString(),
+      },
+    }
+  );
 
   return response.json();
 };
@@ -37,7 +40,14 @@ const defaultPost: PostFormData = {
 const getPostInfo = async (id: string): Promise<PostFormData> => {
   if (id === "new") return defaultPost;
 
-  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/posts/${id}`);
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/admin/posts/${id}`,
+    {
+      headers: {
+        cookie: cookies().toString(),
+      },
+    }
+  );
 
   if (!response.ok) {
     throw new Error(

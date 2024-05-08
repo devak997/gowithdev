@@ -27,7 +27,7 @@ const getPostsView = (view: "grid" | "list", posts: Post[]) => {
         <Image
           width={400}
           height={400}
-          src="/undraw_void_3ggu.png"
+          src="/undraw_void_-3-ggu.svg"
           alt="No Posts"
         />
       </Center>
@@ -57,7 +57,7 @@ function PostsView({ posts }: Readonly<PostsViewProps>) {
           <Group>
             <Button
               component={Link}
-              href="/posts/manage/new"
+              href="/admin/posts/manage/new"
               variant="light"
               leftSection={<IconPlus size={14} />}
             >

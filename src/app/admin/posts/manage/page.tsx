@@ -13,6 +13,7 @@ const getPosts = async (): Promise<Post[]> => {
 
 async function ManagePostsPage() {
   const posts = await getPosts();
+  console.log(posts);
   return <PostsView posts={posts} />;
 }
 

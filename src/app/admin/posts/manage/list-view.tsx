@@ -41,7 +41,7 @@ function TableView({ posts }: Readonly<Props>) {
                 {post.summary.length > 100 ? "..." : ""}
               </Text>
             </TableTd>
-            <TableTd>{format(post.publishedAt, "yyyy-MM-dd")}</TableTd>
+            <TableTd>{format(post.updated_at, "yyyy-MM-dd")}</TableTd>
             <TableTd>
               {post.tags.map((tag) => (
                 <Badge
@@ -57,7 +57,7 @@ function TableView({ posts }: Readonly<Props>) {
             <TableTd>
               <Button
                 component={Link}
-                href={`/posts/manage/${post.id}`}
+                href={`/admin/posts/manage/${post.id}`}
                 variant="subtle"
               >
                 Edit

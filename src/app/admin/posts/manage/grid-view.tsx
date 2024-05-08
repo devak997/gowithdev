@@ -22,7 +22,7 @@ function GridView({ posts }: Readonly<Props>) {
       {posts.map((post) => (
         <Card shadow="sm" padding="lg" radius="md" withBorder key={post.id}>
           <CardSection>
-            <Image src={post.coverImage} height={140} alt={post.title} />
+            <Image src={post.cover_image} height={140} alt={post.title} />
           </CardSection>
 
           <Title order={3} mt="sm" mb="xs" h="56px">
@@ -38,7 +38,7 @@ function GridView({ posts }: Readonly<Props>) {
             <Button
               style={{ flex: 1 }}
               component={Link}
-              href={`/posts/manage/${post.id}`}
+              href={`/admin/posts/manage/${post.id}`}
               variant="light"
               color="blue"
               radius="md"

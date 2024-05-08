@@ -38,7 +38,7 @@ function LoginPage() {
       color: "teal",
     });
 
-    router.push("/posts");
+    router.push("/");
   };
 
   return (
