@@ -9,11 +9,13 @@ import Superscript from "@tiptap/extension-superscript";
 import SubScript from "@tiptap/extension-subscript";
 import { useEffect } from "react";
 import CharacterCount from "@tiptap/extension-character-count";
+import Placeholder from "@tiptap/extension-placeholder";
 
 interface EditorProps {
   value?: string;
   onChange?: (value: string) => void;
   handleMount?: (editor: Editor) => void;
+  placeholder?: string;
 }
 
 const defaultProps: EditorProps = {
@@ -24,6 +26,7 @@ const EditorComponent: React.FC<Readonly<EditorProps>> = ({
   value,
   onChange,
   handleMount: onMount,
+  placeholder,
 } = defaultProps) => {
   const editor = useEditor({
     extensions: [
@@ -35,6 +38,9 @@ const EditorComponent: React.FC<Readonly<EditorProps>> = ({
       Highlight,
       TextAlign.configure({ types: ["heading", "paragraph"] }),
       CharacterCount.configure({}),
+      Placeholder.configure({
+        placeholder: placeholder ?? "Write something...",
+      }),
     ],
     content: value,
     onUpdate({ editor }) {
@@ -93,7 +99,7 @@ const EditorComponent: React.FC<Readonly<EditorProps>> = ({
         </RichTextEditor.ControlsGroup>
       </RichTextEditor.Toolbar>
 
-      <RichTextEditor.Content />
+      <RichTextEditor.Content mih={320} />
     </RichTextEditor>
   );
 };

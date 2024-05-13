@@ -6,4 +6,5 @@ export type PostFormData = {
   category: string;
   slug: string;
   read_time_millis: number;
+  cover_image?: string;
 };
