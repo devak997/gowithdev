@@ -10,9 +10,12 @@ import SubScript from "@tiptap/extension-subscript";
 import { useEffect } from "react";
 import CharacterCount from "@tiptap/extension-character-count";
 import Placeholder from "@tiptap/extension-placeholder";
+import styles from "./styles.module.css";
+import clsx from "clsx";
 
 interface EditorProps {
   value?: string;
+  className?: string;
   onChange?: (value: string) => void;
   handleMount?: (editor: Editor) => void;
   placeholder?: string;
@@ -20,6 +23,7 @@ interface EditorProps {
 
 const defaultProps: EditorProps = {
   value: "",
+  className: "",
 };
 
 const EditorComponent: React.FC<Readonly<EditorProps>> = ({
@@ -27,6 +31,7 @@ const EditorComponent: React.FC<Readonly<EditorProps>> = ({
   onChange,
   handleMount: onMount,
   placeholder,
+  className,
 } = defaultProps) => {
   const editor = useEditor({
     extensions: [
@@ -53,7 +58,7 @@ const EditorComponent: React.FC<Readonly<EditorProps>> = ({
   }, [editor, onMount]);
 
   return (
-    <RichTextEditor editor={editor}>
+    <RichTextEditor editor={editor} className={clsx(className, styles.root)}>
       <RichTextEditor.Toolbar>
         <RichTextEditor.ControlsGroup>
           <RichTextEditor.Bold />
@@ -99,7 +104,7 @@ const EditorComponent: React.FC<Readonly<EditorProps>> = ({
         </RichTextEditor.ControlsGroup>
       </RichTextEditor.Toolbar>
 
-      <RichTextEditor.Content mih={320} />
+      <RichTextEditor.Content className={styles.content} />
     </RichTextEditor>
   );
 };

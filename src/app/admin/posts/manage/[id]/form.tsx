@@ -1,15 +1,13 @@
 "use client";
 
-import EditorComponent from "@/components/Editor";
+import EditorComponent from "@/components/editor";
 import {
   Anchor,
   Box,
-  Breadcrumbs,
   Button,
   Container,
   Group,
   Text,
-  Input,
   InputWrapper,
   Select,
   SimpleGrid,
@@ -24,7 +22,7 @@ import {
 import React from "react";
 
 import {
-  IconChevronRight,
+  IconChevronLeft,
   IconPhoto,
   IconUpload,
   IconX,
@@ -34,8 +32,7 @@ import { PostFormData } from "./types";
 import { notifications } from "@mantine/notifications";
 import { Editor } from "@tiptap/react";
 import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";
-import { set } from "date-fns";
-import { se } from "date-fns/locale";
+import styles from "./styles.module.css";
 
 type Category = {
   value: string;
@@ -213,77 +210,86 @@ function ManagePostForm(props: Readonly<Props>) {
   };
 
   return (
-    <Container size="xl" py="sm">
-      <form onSubmit={form.onSubmit(handleSubmit)}>
-        <Group justify="space-between" align="center">
-          <Box>
-            <Breadcrumbs separator={<IconChevronRight size={16} />}>
-              <Anchor size="sm" href="/admin/posts/manage">
-                Manage Posts
+    <Container
+      fluid
+      py="sm"
+      h="calc(100dvh - var(--app-shell-header-height, 0px) - var(--app-shell-footer-height, 0px))"
+    >
+      <form onSubmit={form.onSubmit(handleSubmit)} style={{ height: "100%" }}>
+        <Stack h="100%">
+          <Group justify="space-between" align="center">
+            <Group align="center" gap="xs">
+              <Anchor size="xs" href="/admin/posts/manage">
+                <IconChevronLeft />
               </Anchor>
-            </Breadcrumbs>
-            <Title order={1} size="h2">
-              {props.isNew ? "New Post" : "Edit Post"}
-            </Title>
-          </Box>
-          <Button size="xs" type="submit">
-            Save
-          </Button>
-        </Group>
-        <Box my="lg" />
-        <Stack gap="lg">
-          <TextInput
-            placeholder="Enter title"
-            label="Title"
-            withAsterisk
-            key={form.key("title")}
-            {...form.getInputProps("title")}
-          />
-          <Textarea
-            placeholder="Enter summary"
-            label="Summary"
-            withAsterisk
-            rows={4}
-            maxLength={250}
-            key={form.key("summary")}
-            {...form.getInputProps("summary")}
-          />
-          <SimpleGrid cols={{ xs: 1, md: 3 }}>
-            <Select
-              label="Category"
+              <Title order={1} size="h4">
+                {props.isNew ? "New Post" : "Edit Post"}
+              </Title>
+            </Group>
+            <Button size="xs" type="submit" variant="light">
+              Save
+            </Button>
+          </Group>
+          <SimpleGrid cols={{ md: 2 }} spacing="xl" className={styles.section}>
+            <Stack gap="lg">
+              <TextInput
+                placeholder="Enter title"
+                label="Title"
+                withAsterisk
+                key={form.key("title")}
+                {...form.getInputProps("title")}
+              />
+              <Textarea
+                placeholder="Enter summary"
+                label="Summary"
+                withAsterisk
+                rows={4}
+                maxLength={250}
+                key={form.key("summary")}
+                {...form.getInputProps("summary")}
+              />
+              <SimpleGrid cols={{ md: 2 }}>
+                <Select
+                  label="Category"
+                  withAsterisk
+                  placeholder="Select Category"
+                  key={form.key("category")}
+                  data={props.categories}
+                  {...form.getInputProps("category")}
+                />
+                <TagsInput
+                  key={form.key("tags")}
+                  label="Tags"
+                  placeholder="Enter tags"
+                  data={form.values.tags}
+                  {...form.getInputProps("tags")}
+                />
+              </SimpleGrid>
+              <TextInput
+                key={form.key("slug")}
+                label="Slug"
+                placeholder="Enter slug"
+                withAsterisk
+                {...form.getInputProps("slug")}
+              />
+              <InputWrapper label="Cover Image" withAsterisk>
+                {renderCoverImage()}
+              </InputWrapper>
+            </Stack>
+            <InputWrapper
+              label="Content"
               withAsterisk
-              placeholder="Select Category"
-              key={form.key("category")}
-              data={props.categories}
-              {...form.getInputProps("category")}
-            />
-            <TagsInput
-              key={form.key("tags")}
-              label="Tags"
-              placeholder="Enter tags"
-              data={form.values.tags}
-              {...form.getInputProps("tags")}
-            />
-            <TextInput
-              key={form.key("slug")}
-              label="Slug"
-              placeholder="Enter slug"
-              withAsterisk
-              {...form.getInputProps("slug")}
-            />
+              className={styles["content-input-wrapper"]}
+            >
+              <EditorComponent
+                className={styles["content-input"]}
+                key={form.key("content")}
+                handleMount={setEditorRef}
+                placeholder="Type content here"
+                {...form.getInputProps("content")}
+              />
+            </InputWrapper>
           </SimpleGrid>
-          <InputWrapper label="Cover Image" withAsterisk>
-            {renderCoverImage()}
-          </InputWrapper>
-          <InputWrapper label="Content" withAsterisk>
-            <Input
-              key={form.key("content")}
-              component={EditorComponent}
-              handleMount={setEditorRef}
-              placeholder="Type content here"
-              {...form.getInputProps("content")}
-            />
-          </InputWrapper>
         </Stack>
       </form>
     </Container>
