@@ -18,11 +18,15 @@ interface Props {
 
 function GridView({ posts }: Readonly<Props>) {
   return (
-    <SimpleGrid cols={3}>
+    <SimpleGrid cols={3} pb="xl">
       {posts.map((post) => (
         <Card shadow="sm" padding="lg" radius="md" withBorder key={post.id}>
           <CardSection>
-            <Image src={post.cover_image} height={140} alt={post.title} />
+            <Image
+              src={`${process.env.NEXT_PUBLIC_MEDIA_URL}/${post.cover_image}`}
+              height={140}
+              alt={post.title}
+            />
           </CardSection>
 
           <Title order={3} mt="sm" mb="xs" h="56px">

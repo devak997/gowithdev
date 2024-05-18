@@ -69,7 +69,7 @@ async function ManagePostPage(props: Readonly<Props>) {
         value: category.id,
         label: category.name,
       }))}
-      isNew={props.params.id === "new"}
+      postId={props.params.id}
     />
   );
 }

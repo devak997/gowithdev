@@ -42,7 +42,7 @@ type Category = {
 interface Props {
   data: PostFormData;
   categories: Category[];
-  isNew: boolean;
+  postId: string;
 }
 
 function ManagePostForm(props: Readonly<Props>) {
@@ -57,19 +57,21 @@ function ManagePostForm(props: Readonly<Props>) {
     const noOfWords = editorRef!.storage.characterCount.words();
     const readTimeMillis = Math.ceil(noOfWords / 200) * 60000;
 
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/admin/posts`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          ...values,
-          read_time_millis: readTimeMillis,
-        }),
-      }
-    );
+    const url =
+      props.postId === "new"
+        ? `${process.env.NEXT_PUBLIC_API_URL}/api/admin/posts`
+        : `${process.env.NEXT_PUBLIC_API_URL}/api/admin/posts/${props.postId}`;
+
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        ...values,
+        read_time_millis: readTimeMillis,
+      }),
+    });
 
     if (!response.ok) {
       notifications.show({
@@ -192,7 +194,9 @@ function ManagePostForm(props: Readonly<Props>) {
     return (
       <Box pos="relative">
         <Image
-          src={process.env.NEXT_PUBLIC_MEDIA_URL + form.values.cover_image}
+          src={
+            process.env.NEXT_PUBLIC_MEDIA_URL + "/" + form.values.cover_image
+          }
           alt="Cover Image"
           radius="md"
           style={{ objectFit: "contain" }}
@@ -223,7 +227,7 @@ function ManagePostForm(props: Readonly<Props>) {
                 <IconChevronLeft />
               </Anchor>
               <Title order={1} size="h4">
-                {props.isNew ? "New Post" : "Edit Post"}
+                {props.postId === "new" ? "New Post" : "Edit Post"}
               </Title>
             </Group>
             <Button size="xs" type="submit" variant="light">
@@ -231,7 +235,7 @@ function ManagePostForm(props: Readonly<Props>) {
             </Button>
           </Group>
           <SimpleGrid cols={{ md: 2 }} spacing="xl" className={styles.section}>
-            <Stack gap="lg">
+            <Stack gap="lg" mih={0} style={{ overflow: "auto" }}>
               <TextInput
                 placeholder="Enter title"
                 label="Title"
@@ -277,6 +281,7 @@ function ManagePostForm(props: Readonly<Props>) {
               </InputWrapper>
             </Stack>
             <InputWrapper
+              mih={0}
               label="Content"
               withAsterisk
               className={styles["content-input-wrapper"]}

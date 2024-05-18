@@ -10,14 +10,17 @@ import {
   ColorSchemeScript,
   MantineProvider,
 } from "@mantine/core";
-import AppHeader from "@/components/AppHeader";
+import AppHeader from "@/components/app-header";
 import { Notifications } from "@mantine/notifications";
+import AuthProvider from "@/context/AuthContext";
+import { isAuthenticated } from "@/lib/session";
 
 type RootLayoutProps = Readonly<{
   children: React.ReactNode;
 }>;
 
-export default function RootLayout({ children }: RootLayoutProps) {
+export default async function RootLayout({ children }: RootLayoutProps) {
+  const authenticated = await isAuthenticated()
   return (
     <html lang="en">
       <head>
@@ -25,13 +28,15 @@ export default function RootLayout({ children }: RootLayoutProps) {
       </head>
       <body>
         <MantineProvider defaultColorScheme="auto">
-          <Notifications />
-          <AppShell header={{ height: 56 }}>
-            <AppShellHeader>
-              <AppHeader />
-            </AppShellHeader>
-            <AppShellMain>{children}</AppShellMain>
-          </AppShell>
+          <AuthProvider authenticated={authenticated}>
+            <Notifications />
+            <AppShell header={{ height: 56 }}>
+              <AppShellHeader>
+                <AppHeader />
+              </AppShellHeader>
+              <AppShellMain>{children}</AppShellMain>
+            </AppShell>
+          </AuthProvider>
         </MantineProvider>
       </body>
     </html>
