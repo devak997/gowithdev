@@ -51,7 +51,6 @@ const AuthProvider: React.FC<PropsWithChildren<AuthContextProps>> = ({
     }
   };
 
-  console.log("ikkadiki vacha");
   useEffect(() => {
     if (!authenticated) {
       setLoading(false);
