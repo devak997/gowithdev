@@ -1,6 +1,7 @@
 "use client";
 
-import { Loader, LoadingOverlay, Skeleton } from "@mantine/core";
+import { getCurrentUser } from "@/api/user";
+import { LoadingOverlay } from "@mantine/core";
 import React, {
   PropsWithChildren,
   createContext,
@@ -9,10 +10,10 @@ import React, {
 } from "react";
 
 interface User {
-  name: string;
+  avatar: string;
   email: string;
   id: string;
-  avatar: string;
+  name: string;
 }
 
 interface AuthContextProps {
@@ -20,30 +21,24 @@ interface AuthContextProps {
 }
 
 interface AuthContextState {
-  user: User | null;
+  user?: User;
 }
 
-const AuthContext = createContext<AuthContextState>({
-  user: null,
-});
+const AuthContext = createContext<AuthContextState>({});
 
 export const useAuth = () => React.useContext(AuthContext);
 
 const AuthProvider: React.FC<PropsWithChildren<AuthContextProps>> = ({
-  children,
   authenticated,
+  children,
 }) => {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<User>();
   const [loading, setLoading] = useState(false);
 
   const fetchUser = async () => {
     try {
       setLoading(true);
-      const response = await fetch("/api/me");
-      const data = await response.json();
-
-      console.log(data);
-      setUser(data);
+      setUser(await getCurrentUser());
     } catch (error) {
       console.error(error);
     } finally {
@@ -57,7 +52,9 @@ const AuthProvider: React.FC<PropsWithChildren<AuthContextProps>> = ({
       return;
     }
 
-    fetchUser();
+    fetchUser().catch((error: unknown) => {
+      console.error(error);
+    });
   }, [authenticated]);
 
   const contextValue = React.useMemo(() => ({ user }), [user]);

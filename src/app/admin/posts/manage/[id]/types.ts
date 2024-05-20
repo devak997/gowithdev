@@ -1,10 +1,10 @@
 export type PostFormData = {
-  title: string;
+  category: string;
   content: string;
+  cover_image: string;
+  read_time_millis: number;
+  slug: string;
   summary: string;
   tags: string[];
-  category: string;
-  slug: string;
-  read_time_millis: number;
-  cover_image?: string;
+  title: string;
 };

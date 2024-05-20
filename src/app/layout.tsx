@@ -1,8 +1,6 @@
-import "@mantine/core/styles.css";
-import "@mantine/tiptap/styles.css";
-import "@mantine/notifications/styles.css";
-import "@mantine/dropzone/styles.css";
-
+import AppHeader from "@/components/app-header";
+import AuthProvider from "@/context/auth-context";
+import { isAuthenticated } from "@/lib/session";
 import {
   AppShell,
   AppShellHeader,
@@ -10,17 +8,18 @@ import {
   ColorSchemeScript,
   MantineProvider,
 } from "@mantine/core";
-import AppHeader from "@/components/app-header";
+import "@mantine/core/styles.css";
+import "@mantine/dropzone/styles.css";
 import { Notifications } from "@mantine/notifications";
-import AuthProvider from "@/context/AuthContext";
-import { isAuthenticated } from "@/lib/session";
+import "@mantine/notifications/styles.css";
+import "@mantine/tiptap/styles.css";
 
 type RootLayoutProps = Readonly<{
   children: React.ReactNode;
 }>;
 
 export default async function RootLayout({ children }: RootLayoutProps) {
-  const authenticated = await isAuthenticated()
+  const authenticated = await isAuthenticated();
   return (
     <html lang="en">
       <head>

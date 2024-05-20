@@ -1,26 +1,22 @@
+import { getPosts } from "@/api/posts";
 import { Container, SimpleGrid, Title } from "@mantine/core";
 import { Metadata } from "next";
-import { Post } from "./types";
+
 import PostCard from "./post-card";
 
 export const metadata: Metadata = {
   title: "Posts",
 };
 
-const getPosts = async (): Promise<Post[]> => {
-  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/posts`);
-  return response.json();
-};
-
-async function PostsPage() {
+const PostsPage = async () => {
   const posts = await getPosts();
   return (
     <Container
-      size="xl"
-      pt="md"
       h="calc(100dvh - var(--app-shell-header-height, 0px) - var(--app-shell-footer-height, 0px))"
+      pt="md"
+      size="xl"
     >
-      <Title order={1} size="h2" mb="sm">
+      <Title mb="sm" order={1} size="h2">
         Posts
       </Title>
       <SimpleGrid cols={3} pb="xl">
@@ -30,6 +26,6 @@ async function PostsPage() {
       </SimpleGrid>
     </Container>
   );
-}
+};
 
 export default PostsPage;

@@ -8,7 +8,7 @@ const IconMoonStars = dynamic(
     const _module = await import("@tabler/icons-react");
     return _module.IconMoonStars;
   },
-  { ssr: false },
+  { ssr: false }
 );
 
 const IconSun = dynamic(
@@ -16,14 +16,19 @@ const IconSun = dynamic(
     const _module = await import("@tabler/icons-react");
     return _module.IconSun;
   },
-  { ssr: false },
+  { ssr: false }
 );
 
-export function ColorSchemeToggle() {
+export const ColorSchemeToggle = () => {
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
 
   return (
-    <ActionIcon variant="light" onClick={() => toggleColorScheme()}>
+    <ActionIcon
+      onClick={() => {
+        toggleColorScheme();
+      }}
+      variant="light"
+    >
       {colorScheme === "dark" ? (
         <IconSun size={16} />
       ) : (
@@ -31,4 +36,4 @@ export function ColorSchemeToggle() {
       )}
     </ActionIcon>
   );
-}
+};

@@ -1,9 +1,10 @@
 import { Container } from "@mantine/core";
+
 import LoginForm from "./form";
 
-function LoginPage() {
+const LoginPage = () => {
   return (
-    <Container size="xs" p="md">
+    <Container p="md" size="xs">
       <LoginForm />
     </Container>
   );

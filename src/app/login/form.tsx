@@ -1,12 +1,14 @@
 "use client";
 
-import { Stack, TextInput, Button } from "@mantine/core";
+import { login } from "@/api/auth";
+import { Button, Stack, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { IconMail, IconPassword } from "@tabler/icons-react";
-import React, { useState } from "react";
-import { LoginData } from "./types";
 import { notifications } from "@mantine/notifications";
+import { IconMail, IconPassword } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
+import React, { useState } from "react";
+
+import { LoginData } from "./types";
 
 const LoginForm: React.FC = () => {
   const router = useRouter();
@@ -16,39 +18,20 @@ const LoginForm: React.FC = () => {
   const handleSubmit = async (formValue: LoginData) => {
     try {
       setLoading(true);
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/login`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(formValue),
-          credentials: "include",
-        }
-      );
-
-      if (!response.ok) {
-        return notifications.show({
-          title: "Login failed",
-          message: "Something went wrong",
-          color: "red",
-        });
-      }
-
+      await login(formValue.email, formValue.password);
       notifications.show({
-        title: "Login successful",
-        message: "You are now logged in",
         color: "teal",
+        message: "You are now logged in",
+        title: "Login successful",
       });
 
       router.push("/");
     } catch (error) {
       console.error(error);
       notifications.show({
-        title: "Login failed",
-        message: "Something went wrong",
         color: "red",
+        message: "Something went wrong",
+        title: "Login failed",
       });
     } finally {
       setLoading(false);
@@ -56,22 +39,22 @@ const LoginForm: React.FC = () => {
   };
 
   return (
-    <form onSubmit={form.onSubmit(handleSubmit)}>
+    <form onSubmit={() => form.onSubmit(handleSubmit)}>
       <Stack gap="lg">
         <TextInput
           label="Email"
-          type="email"
           leftSection={<IconMail size={16} />}
           placeholder="Enter your email"
           required
+          type="email"
           {...form.getInputProps("email")}
         />
         <TextInput
           label="Password"
-          placeholder="Enter your password"
-          type="password"
           leftSection={<IconPassword size={16} />}
+          placeholder="Enter your password"
           required
+          type="password"
           {...form.getInputProps("password")}
         />
         <Button loading={loading} type="submit">

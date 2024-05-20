@@ -1,11 +1,11 @@
-import { Button, Container, Flex, Group, Text } from "@mantine/core";
-
-import { ColorSchemeToggle } from "../ColorSchemeToggle";
-import Link from "next/link";
 import { isAuthenticated } from "@/lib/session";
-import UserAvatar from "./UserAvatar";
+import { Button, Container, Flex, Group, Text } from "@mantine/core";
+import Link from "next/link";
 
-async function AppHeader() {
+import { ColorSchemeToggle } from "../color-scheme-toggle";
+import UserAvatar from "./user-avatar";
+
+const AppHeader = async () => {
   const authenticated = await isAuthenticated();
 
   const getAuthSection = () => {
@@ -14,7 +14,7 @@ async function AppHeader() {
     }
 
     return (
-      <Button size="xs" component={Link} href="/login">
+      <Button component={Link} href="/login" size="xs">
         Sign In
       </Button>
     );
@@ -22,9 +22,9 @@ async function AppHeader() {
 
   return (
     <Container fluid>
-      <Flex justify={"space-between"} align={"center"} h={56}>
-        <Button variant="transparent" component={Link} href="/">
-          <Text fz="xl" ff="monospace" fw={600}>
+      <Flex align={"center"} h={56} justify={"space-between"}>
+        <Button component={Link} href="/" variant="transparent">
+          <Text ff="monospace" fw={600} fz="xl">
             Codejedi
           </Text>
         </Button>
@@ -35,6 +35,6 @@ async function AppHeader() {
       </Flex>
     </Container>
   );
-}
+};
 
 export default AppHeader;

@@ -1,39 +1,41 @@
 "use client";
-import { RichTextEditor, Link } from "@mantine/tiptap";
-import { Editor, useEditor } from "@tiptap/react";
-import Highlight from "@tiptap/extension-highlight";
-import StarterKit from "@tiptap/starter-kit";
-import Underline from "@tiptap/extension-underline";
-import TextAlign from "@tiptap/extension-text-align";
-import Superscript from "@tiptap/extension-superscript";
-import SubScript from "@tiptap/extension-subscript";
-import { useEffect } from "react";
+import { Link, RichTextEditor } from "@mantine/tiptap";
 import CharacterCount from "@tiptap/extension-character-count";
+import Highlight from "@tiptap/extension-highlight";
 import Placeholder from "@tiptap/extension-placeholder";
-import styles from "./styles.module.css";
+import SubScript from "@tiptap/extension-subscript";
+import Superscript from "@tiptap/extension-superscript";
+import TextAlign from "@tiptap/extension-text-align";
+import Underline from "@tiptap/extension-underline";
+import { Editor, useEditor } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
 import clsx from "clsx";
+import { useEffect } from "react";
+
+import styles from "./styles.module.css";
 
 interface EditorProps {
-  value?: string;
-  className?: string;
-  onChange?: (value: string) => void;
+  editorClass?: string;
   handleMount?: (editor: Editor) => void;
+  onChange?: (value: string) => void;
   placeholder?: string;
+  value?: string;
 }
 
 const defaultProps: EditorProps = {
+  editorClass: "",
   value: "",
-  className: "",
 };
 
 const EditorComponent: React.FC<Readonly<EditorProps>> = ({
-  value,
-  onChange,
+  editorClass,
   handleMount: onMount,
+  onChange,
   placeholder,
-  className,
+  value,
 } = defaultProps) => {
   const editor = useEditor({
+    content: value,
     extensions: [
       StarterKit,
       Underline,
@@ -47,18 +49,19 @@ const EditorComponent: React.FC<Readonly<EditorProps>> = ({
         placeholder: placeholder ?? "Write something...",
       }),
     ],
-    content: value,
     onUpdate({ editor }) {
       onChange?.(editor.getHTML());
     },
   });
 
   useEffect(() => {
-    onMount?.(editor!);
+    if (editor) {
+      onMount?.(editor);
+    }
   }, [editor, onMount]);
 
   return (
-    <RichTextEditor editor={editor} className={clsx(className, styles.root)}>
+    <RichTextEditor className={clsx(editorClass, styles.root)} editor={editor}>
       <RichTextEditor.Toolbar>
         <RichTextEditor.ControlsGroup>
           <RichTextEditor.Bold />

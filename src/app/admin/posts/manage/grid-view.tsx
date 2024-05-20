@@ -1,52 +1,54 @@
+import { Post } from "@/types";
 import {
-  SimpleGrid,
+  Box,
+  Button,
   Card,
   CardSection,
-  Title,
-  Box,
   Group,
-  Button,
   Image,
+  SimpleGrid,
   Text,
+  Title,
 } from "@mantine/core";
 import Link from "next/link";
-import { Post } from "./types";
 
 interface Props {
   posts: Post[];
 }
 
-function GridView({ posts }: Readonly<Props>) {
+const GridView = ({ posts }: Readonly<Props>) => {
   return (
     <SimpleGrid cols={3} pb="xl">
       {posts.map((post) => (
-        <Card shadow="sm" padding="lg" radius="md" withBorder key={post.id}>
+        <Card key={post.id} padding="lg" radius="md" shadow="sm" withBorder>
           <CardSection>
             <Image
-              src={`${process.env.NEXT_PUBLIC_MEDIA_URL}/${post.cover_image}`}
-              height={140}
               alt={post.title}
+              height={140}
+              src={`${process.env.NEXT_PUBLIC_MEDIA_URL as string}/${
+                post.cover_image
+              }`}
             />
           </CardSection>
 
-          <Title order={3} mt="sm" mb="xs" h="56px">
+          <Title h="56px" mb="xs" mt="sm" order={3}>
             {post.title}
           </Title>
           <Box style={{ flex: 1 }}>
-            <Text fz="sm" c="dimmed" lineClamp={4}>
+            <Text c="dimmed" fz="sm" lineClamp={4}>
               {post.summary}
             </Text>
           </Box>
 
           <Group align="center" mt="md">
             <Button
-              style={{ flex: 1 }}
-              component={Link}
-              href={`/admin/posts/manage/${post.id}`}
-              variant="light"
               color="blue"
-              radius="md"
+              component={Link}
               fullWidth
+              href={`/admin/posts/manage/${post.id}`}
+              radius="md"
+              style={{ flex: 1 }}
+              variant="light"
             >
               Edit
             </Button>
@@ -55,6 +57,6 @@ function GridView({ posts }: Readonly<Props>) {
       ))}
     </SimpleGrid>
   );
-}
+};
 
 export default GridView;

@@ -1,43 +1,45 @@
 import { SegmentedControl, VisuallyHidden, rem } from "@mantine/core";
-import { IconListDetails, IconGridDots } from "@tabler/icons-react";
+import { IconGridDots, IconListDetails } from "@tabler/icons-react";
 
 interface Props {
-  value: "list" | "grid";
-  onChange(value: "list" | "grid"): void;
+  onChange(value: "grid" | "list"): void;
+  value: "grid" | "list";
 }
 
-function ViewToggle({ value, onChange }: Readonly<Props>) {
+const ViewToggle = ({ onChange, value }: Readonly<Props>) => {
   const iconProps = {
-    style: { width: rem(20), height: rem(20), display: "block" },
     stroke: 1.5,
+    style: { display: "block", height: rem(20), width: rem(20) },
   };
 
   return (
     <SegmentedControl
-      value={value}
-      onChange={onChange as (value: string) => void}
       data={[
         {
-          value: "list",
           label: (
             <>
               <IconListDetails {...iconProps} />
               <VisuallyHidden>Preview</VisuallyHidden>
             </>
           ),
+          value: "list",
         },
         {
-          value: "grid",
           label: (
             <>
               <IconGridDots {...iconProps} />
               <VisuallyHidden>Code</VisuallyHidden>
             </>
           ),
+          value: "grid",
         },
       ]}
+      onChange={function (value: string) {
+        onChange(value as "grid" | "list");
+      }}
+      value={value}
     />
   );
-}
+};
 
 export default ViewToggle;

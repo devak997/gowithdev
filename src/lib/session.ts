@@ -1,6 +1,6 @@
-import "server-only";
 import { jwtVerify } from "jose";
 import { cookies } from "next/headers";
+import "server-only";
 
 export const verifyToken = async () => {
   const token = cookies().get("token")?.value;
@@ -19,7 +19,7 @@ export const isAuthenticated = async () => {
   try {
     await verifyToken();
     return true;
-  } catch (error) {
+  } catch {
     return false;
   }
 };

@@ -1,5 +1,7 @@
 "use client";
 
+import { getPreSignedUrl, uploadFile } from "@/api/media";
+import { createPost, updatePost } from "@/api/posts";
 import EditorComponent from "@/components/editor";
 import {
   Anchor,
@@ -7,130 +9,97 @@ import {
   Button,
   Container,
   Group,
-  Text,
+  Image,
   InputWrapper,
   Select,
   SimpleGrid,
   Stack,
   TagsInput,
+  Text,
   TextInput,
   Textarea,
   Title,
   rem,
-  Image,
 } from "@mantine/core";
-import React from "react";
-
+import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";
+import { useForm } from "@mantine/form";
+import { notifications } from "@mantine/notifications";
 import {
   IconChevronLeft,
   IconPhoto,
   IconUpload,
   IconX,
 } from "@tabler/icons-react";
-import { useForm } from "@mantine/form";
-import { PostFormData } from "./types";
-import { notifications } from "@mantine/notifications";
 import { Editor } from "@tiptap/react";
-import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";
+import React from "react";
+
 import styles from "./styles.module.css";
+import { PostFormData } from "./types";
 
 type Category = {
-  value: string;
   label: string;
+  value: string;
 };
 
 interface Props {
-  data: PostFormData;
   categories: Category[];
+  data: PostFormData;
   postId: string;
 }
 
-function ManagePostForm(props: Readonly<Props>) {
-  const [editorRef, setEditorRef] = React.useState<Editor>();
+const ManagePostForm = (props: Readonly<Props>) => {
+  const [editorReference, setEditorReference] = React.useState<Editor>();
   const [coverImageLoading, setCoverImageLoading] = React.useState(false);
   const [editCoverImage, setEditCoverImage] = React.useState(false);
   const form = useForm<PostFormData>({
-    initialValues: props.data ?? {},
+    initialValues: props.data,
   });
 
   const handleSubmit = async (values: PostFormData) => {
-    const noOfWords = editorRef!.storage.characterCount.words();
-    const readTimeMillis = Math.ceil(noOfWords / 200) * 60000;
+    const noOfWords = editorReference?.storage.characterCount as number;
+    const readTimeMillis = Math.ceil(noOfWords / 200) * 60_000;
 
-    const url =
+    const data = {
+      ...values,
+      read_time_millis: readTimeMillis,
+    };
+
+    try {
       props.postId === "new"
-        ? `${process.env.NEXT_PUBLIC_API_URL}/api/admin/posts`
-        : `${process.env.NEXT_PUBLIC_API_URL}/api/admin/posts/${props.postId}`;
+        ? await createPost(data)
+        : await updatePost(props.postId, data);
 
-    const response = await fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        ...values,
-        read_time_millis: readTimeMillis,
-      }),
-    });
-
-    if (!response.ok) {
       notifications.show({
-        title: "Failed to save post",
-        message: await response.text(),
+        color: "teal",
+        message: "Post saved successfully",
+        title: "Saved",
+      });
+    } catch (error) {
+      notifications.show({
         color: "red",
+        message: (error as Error).message,
+        title: "Failed to save post",
       });
 
       return;
     }
-
-    notifications.show({
-      title: "Saved",
-      message: "Post saved successfully",
-      color: "teal",
-    });
   };
 
   const handleFileUpload = async (files: File[]) => {
     const file = files[0];
-    if (!file) {
-      return;
-    }
-
     const formData = new FormData();
     formData.append("file", file);
 
     try {
       setCoverImageLoading(true);
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/media/pre-signed-url`
-      );
-
-      if (!response.ok) {
-        notifications.show({
-          title: "Failed to upload file",
-          message: await response.text(),
-          color: "red",
-        });
-
-        return;
-      }
-
-      const data = await response.json();
-
-      await fetch(data.url, {
-        method: "PUT",
-        body: file,
-        headers: {
-          "Content-Type": file.type,
-        },
-      });
-
+      const data = await getPreSignedUrl();
+      await uploadFile(file, data.url);
       form.setFieldValue("cover_image", data.path);
     } catch (error) {
       notifications.show({
-        title: "Failed to upload file",
-        message: (error as Error).message,
         color: "red",
+        message: (error as Error).message,
+        title: "Failed to upload file",
       });
     } finally {
       setCoverImageLoading(false);
@@ -141,49 +110,49 @@ function ManagePostForm(props: Readonly<Props>) {
     if (editCoverImage || !form.values.cover_image) {
       return (
         <Dropzone
-          loading={coverImageLoading}
-          key={form.key("cover_image")}
           accept={IMAGE_MIME_TYPE}
+          key={form.key("cover_image")}
+          loading={coverImageLoading}
           onDrop={handleFileUpload}
         >
           <Group
-            justify="center"
             gap="xl"
+            justify="center"
             mih={220}
             style={{ pointerEvents: "none" }}
           >
             <Dropzone.Accept>
               <IconUpload
-                style={{
-                  width: rem(52),
-                  height: rem(52),
-                  color: "var(--mantine-color-blue-6)",
-                }}
                 stroke={1.5}
+                style={{
+                  color: "var(--mantine-color-blue-6)",
+                  height: rem(52),
+                  width: rem(52),
+                }}
               />
             </Dropzone.Accept>
             <Dropzone.Reject>
               <IconX
-                style={{
-                  width: rem(52),
-                  height: rem(52),
-                  color: "var(--mantine-color-red-6)",
-                }}
                 stroke={1.5}
+                style={{
+                  color: "var(--mantine-color-red-6)",
+                  height: rem(52),
+                  width: rem(52),
+                }}
               />
             </Dropzone.Reject>
             <Dropzone.Idle>
               <IconPhoto
-                style={{
-                  width: rem(52),
-                  height: rem(52),
-                  color: "var(--mantine-color-dimmed)",
-                }}
                 stroke={1.5}
+                style={{
+                  color: "var(--mantine-color-dimmed)",
+                  height: rem(52),
+                  width: rem(52),
+                }}
               />
             </Dropzone.Idle>
 
-            <Text size="xl" inline>
+            <Text inline size="xl">
               Drag image here or click to select file
             </Text>
           </Group>
@@ -194,18 +163,22 @@ function ManagePostForm(props: Readonly<Props>) {
     return (
       <Box pos="relative">
         <Image
-          src={
-            process.env.NEXT_PUBLIC_MEDIA_URL + "/" + form.values.cover_image
-          }
           alt="Cover Image"
           radius="md"
+          src={
+            (process.env.NEXT_PUBLIC_MEDIA_URL as string) +
+            "/" +
+            form.values.cover_image
+          }
           style={{ objectFit: "contain" }}
         />
         <Button
+          onClick={() => {
+            setEditCoverImage(true);
+          }}
           size="xs"
+          style={{ position: "absolute", right: rem(8), top: rem(8) }}
           variant="light"
-          onClick={() => setEditCoverImage(true)}
-          style={{ position: "absolute", top: rem(8), right: rem(8) }}
         >
           Change
         </Button>
@@ -216,14 +189,14 @@ function ManagePostForm(props: Readonly<Props>) {
   return (
     <Container
       fluid
-      py="sm"
       h="calc(100dvh - var(--app-shell-header-height, 0px) - var(--app-shell-footer-height, 0px))"
+      py="sm"
     >
       <form onSubmit={form.onSubmit(handleSubmit)} style={{ height: "100%" }}>
         <Stack h="100%">
-          <Group justify="space-between" align="center">
+          <Group align="center" justify="space-between">
             <Group align="center" gap="xs">
-              <Anchor size="xs" href="/admin/posts/manage">
+              <Anchor href="/admin/posts/manage" size="xs">
                 <IconChevronLeft />
               </Anchor>
               <Title order={1} size="h4">
@@ -234,38 +207,38 @@ function ManagePostForm(props: Readonly<Props>) {
               Save
             </Button>
           </Group>
-          <SimpleGrid cols={{ md: 2 }} spacing="xl" className={styles.section}>
+          <SimpleGrid className={styles.section} cols={{ md: 2 }} spacing="xl">
             <Stack gap="lg" mih={0} style={{ overflow: "auto" }}>
               <TextInput
-                placeholder="Enter title"
-                label="Title"
-                withAsterisk
                 key={form.key("title")}
+                label="Title"
+                placeholder="Enter title"
+                withAsterisk
                 {...form.getInputProps("title")}
               />
               <Textarea
-                placeholder="Enter summary"
-                label="Summary"
-                withAsterisk
-                rows={4}
-                maxLength={250}
                 key={form.key("summary")}
+                label="Summary"
+                maxLength={250}
+                placeholder="Enter summary"
+                rows={4}
+                withAsterisk
                 {...form.getInputProps("summary")}
               />
               <SimpleGrid cols={{ md: 2 }}>
                 <Select
-                  label="Category"
-                  withAsterisk
-                  placeholder="Select Category"
-                  key={form.key("category")}
                   data={props.categories}
+                  key={form.key("category")}
+                  label="Category"
+                  placeholder="Select Category"
+                  withAsterisk
                   {...form.getInputProps("category")}
                 />
                 <TagsInput
+                  data={form.values.tags}
                   key={form.key("tags")}
                   label="Tags"
                   placeholder="Enter tags"
-                  data={form.values.tags}
                   {...form.getInputProps("tags")}
                 />
               </SimpleGrid>
@@ -281,15 +254,15 @@ function ManagePostForm(props: Readonly<Props>) {
               </InputWrapper>
             </Stack>
             <InputWrapper
-              mih={0}
-              label="Content"
-              withAsterisk
               className={styles["content-input-wrapper"]}
+              label="Content"
+              mih={0}
+              withAsterisk
             >
               <EditorComponent
-                className={styles["content-input"]}
+                editorClass={styles["content-input"]}
+                handleMount={setEditorReference}
                 key={form.key("content")}
-                handleMount={setEditorRef}
                 placeholder="Type content here"
                 {...form.getInputProps("content")}
               />
@@ -299,6 +272,6 @@ function ManagePostForm(props: Readonly<Props>) {
       </form>
     </Container>
   );
-}
+};
 
 export default ManagePostForm;

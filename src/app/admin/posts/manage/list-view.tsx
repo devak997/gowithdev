@@ -1,16 +1,16 @@
+import { Post } from "@/types";
 import {
+  Badge,
+  Button,
   Table,
   TableTbody,
   TableTd,
   TableTh,
   TableThead,
   TableTr,
-  Title,
   Text,
-  Badge,
-  Button,
+  Title,
 } from "@mantine/core";
-import { Post } from "./types";
 import { format } from "date-fns";
 import Link from "next/link";
 
@@ -18,7 +18,7 @@ interface Props {
   posts: Post[];
 }
 
-function TableView({ posts }: Readonly<Props>) {
+const TableView = ({ posts }: Readonly<Props>) => {
   return (
     <Table verticalSpacing="md">
       <TableThead>
@@ -33,10 +33,10 @@ function TableView({ posts }: Readonly<Props>) {
         {posts.map((post) => (
           <TableTr key={post.id}>
             <TableTd>
-              <Title size="h6" order={2}>
+              <Title order={2} size="h6">
                 {post.title}
               </Title>
-              <Text size="xs" opacity={0.6}>
+              <Text opacity={0.6} size="xs">
                 {post.summary.slice(0, 100)}
                 {post.summary.length > 100 ? "..." : ""}
               </Text>
@@ -45,10 +45,10 @@ function TableView({ posts }: Readonly<Props>) {
             <TableTd>
               {post.tags.map((tag) => (
                 <Badge
-                  variant="light"
                   key={tag}
                   size="xs"
                   style={{ marginRight: 5 }}
+                  variant="light"
                 >
                   {tag}
                 </Badge>
@@ -68,6 +68,6 @@ function TableView({ posts }: Readonly<Props>) {
       </TableTbody>
     </Table>
   );
-}
+};
 
 export default TableView;
