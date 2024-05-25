@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@mantine/code-highlight": "^7.10.0",
     "@mantine/core": "^7.10.0",
     "@mantine/dropzone": "^7.10.0",
     "@mantine/form": "^7.10.0",
@@ -17,6 +18,7 @@
     "@mantine/tiptap": "^7.10.0",
     "@tabler/icons-react": "^3.5.0",
     "@tiptap/extension-character-count": "^2.4.0",
+    "@tiptap/extension-code-block": "^2.4.0",
     "@tiptap/extension-highlight": "^2.4.0",
     "@tiptap/extension-link": "^2.4.0",
     "@tiptap/extension-placeholder": "^2.4.0",
@@ -47,6 +49,9 @@
     "postcss": "^8.4.38",
     "postcss-preset-mantine": "^1.15.0",
     "postcss-simple-vars": "^7.0.1",
-    "typescript": "^5"
+    "rehype-parse": "^9.0.0",
+    "rehype-react": "^8.0.0",
+    "typescript": "^5",
+    "unified": "^11.0.4"
   }
 }

@@ -56,7 +56,8 @@ const ManagePostForm = (props: Readonly<Props>) => {
   });
 
   const handleSubmit = async (values: PostFormData) => {
-    const noOfWords = editorReference?.storage.characterCount as number;
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
+    const noOfWords = editorReference?.storage.characterCount.words() as number;
     const readTimeMillis = Math.ceil(noOfWords / 200) * 60_000;
 
     const data = {

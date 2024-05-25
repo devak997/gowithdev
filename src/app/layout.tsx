@@ -13,6 +13,7 @@ import "@mantine/dropzone/styles.css";
 import { Notifications } from "@mantine/notifications";
 import "@mantine/notifications/styles.css";
 import "@mantine/tiptap/styles.css";
+import "@mantine/code-highlight/styles.css";
 
 type RootLayoutProps = Readonly<{
   children: React.ReactNode;

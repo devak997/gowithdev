@@ -4,6 +4,7 @@ export type PreSignedResponse = {
 };
 
 export type Post = {
+  content: string;
   cover_image: string;
   id: string;
   read_time_millis: number;

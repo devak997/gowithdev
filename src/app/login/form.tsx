@@ -39,7 +39,7 @@ const LoginForm: React.FC = () => {
   };
 
   return (
-    <form onSubmit={() => form.onSubmit(handleSubmit)}>
+    <form onSubmit={form.onSubmit(handleSubmit)}>
       <Stack gap="lg">
         <TextInput
           label="Email"

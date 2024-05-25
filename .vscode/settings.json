@@ -1,6 +1,13 @@
 {
   "editor.formatOnSave": true,
+  "cssVariables.lookupFiles": [
+    "**/*.css",
+    "**/*.scss",
+    "**/*.sass",
+    "**/*.less",
+    "node_modules/@mantine/core/styles.css"
+  ],
   "editor.codeActionsOnSave": {
-    // "source.fixAll.eslint": "always"
+    "source.fixAll.eslint": "always"
   }
 }

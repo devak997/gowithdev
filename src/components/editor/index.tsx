@@ -1,6 +1,7 @@
 "use client";
 import { Link, RichTextEditor } from "@mantine/tiptap";
 import CharacterCount from "@tiptap/extension-character-count";
+import CodeBlock from "@tiptap/extension-code-block";
 import Highlight from "@tiptap/extension-highlight";
 import Placeholder from "@tiptap/extension-placeholder";
 import SubScript from "@tiptap/extension-subscript";
@@ -47,6 +48,9 @@ const EditorComponent: React.FC<Readonly<EditorProps>> = ({
       CharacterCount.configure({}),
       Placeholder.configure({
         placeholder: placeholder ?? "Write something...",
+      }),
+      CodeBlock.configure({
+        languageClassPrefix: "language-",
       }),
     ],
     onUpdate({ editor }) {
