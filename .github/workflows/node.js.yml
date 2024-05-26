@@ -52,7 +52,7 @@ jobs:
     - name: Whitelist IP on Hetzner firewall
       uses: adnanjaw/ip-whitelist-on-hetznerfw@v1
       with:
-        hetzner_api_key: ${{ secrets.HETZNER_API_KEY }}
+        hetzner_api_key: ${{ secrets.GH_HETZNER_DEPLOY_TOKEN }}
         ip_address: ${{ steps.ip.outputs.ipv4 }}
         firewall_name: my-firewall
         direction: in
