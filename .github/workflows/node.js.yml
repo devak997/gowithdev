@@ -9,8 +9,13 @@ on:
   pull_request:
     branches: [ "main" ]
 
+env:
+  NEXT_PUBLIC_API_URL: ${{secrets.NEXT_PUBLIC_API_URL}}
+  JWT_SECRET: ${{secrets.JWT_SECRET}}
+  NEXT_PUBLIC_MEDIA_URL: ${{secrets.NEXT_PUBLIC_MEDIA_URL}}
+
 jobs:
-  build:
+  build_and_deploy:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
@@ -42,9 +47,6 @@ jobs:
     - run: pnpm run build
     - run: pnpm test --if-present
 
-  deploy:
-    runs-on: ubuntu-latest
-    steps:
     - name: Get Public IP
       id: ip
       uses: haythem/public-ip@v1.3
@@ -54,7 +56,7 @@ jobs:
       with:
         hetzner_api_key: ${{ secrets.GH_HETZNER_DEPLOY_TOKEN }}
         ip_address: ${{ steps.ip.outputs.ipv4 }}
-        firewall_name: my-firewall
+        firewall_name: ${{ secrets.GH_HETZNER_FIREWALL_NAME }}
         direction: in
         protocol: tcp
         port: 22
