@@ -1,4 +1,5 @@
 import { getPosts } from "@/api/posts";
+import BreadcrumbsComponent from "@/components/breadcrumbs-comp";
 import { Container, SimpleGrid, Title } from "@mantine/core";
 import { Metadata } from "next";
 
@@ -16,6 +17,7 @@ const PostsPage = async () => {
       pt="md"
       size="xl"
     >
+      <BreadcrumbsComponent />
       <Title mb="sm" order={1} size="h2">
         Posts
       </Title>

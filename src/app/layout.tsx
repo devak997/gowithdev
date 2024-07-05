@@ -14,6 +14,7 @@ import { Notifications } from "@mantine/notifications";
 import "@mantine/notifications/styles.css";
 import "@mantine/tiptap/styles.css";
 import "@mantine/code-highlight/styles.css";
+import Script from "next/script";
 
 type RootLayoutProps = Readonly<{
   children: React.ReactNode;
@@ -24,7 +25,19 @@ export default async function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en">
       <head>
+        <link href="/favicon.ico" rel="icon" sizes="any" />
         <ColorSchemeScript defaultColorScheme="auto" />
+        <Script
+          async
+          src="https://www.googletagmanager.com/gtag/js?id=G-E849SJSMLD"
+        ></Script>
+        <Script id="ga-tag">
+          {`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-E849SJSMLD');`}
+        </Script>
       </head>
       <body>
         <MantineProvider defaultColorScheme="auto">

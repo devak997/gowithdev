@@ -1,4 +1,7 @@
 import { getPost } from "@/api/posts";
+import BreadcrumbsComponent, {
+  BreadcrumbItem,
+} from "@/components/breadcrumbs-comp";
 import CodeBlock from "@/components/code-block";
 import { Container, Title, TypographyStylesProvider } from "@mantine/core";
 import React from "react";
@@ -14,6 +17,8 @@ type Props = {
     id: string;
   };
 };
+
+const breadcrumbs: BreadcrumbItem[] = [{ href: "/posts", title: "Posts" }];
 
 const getProcessedPostContent = async (content: string) => {
   const { result } = await unified()
@@ -35,7 +40,8 @@ const PostPage: React.FC<Props> = async ({ params: { id } }) => {
   const post = await getPost(id);
 
   return (
-    <Container>
+    <Container pt="md" >
+      <BreadcrumbsComponent items={breadcrumbs} />
       <Title mb="md" order={1}>
         {post.title}
       </Title>
