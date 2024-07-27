@@ -11,10 +11,9 @@ FROM base AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-
 RUN --mount=type=bind,target=. \
     --mount=type=secret,id=NEXT_PUBLIC_API_URL \
-    NEXT_PUBLIC_API_URL=$(cat /run/secrets/NEXT_PUBLIC_API_URL) corepack enable pnpm && pnpm run build;
+    NEXT_PUBLIC_API_URL=$(cat /run/secrets/NEXT_PUBLIC_API_URL) npm run build;
 
 FROM base AS runner
 WORKDIR /app
