@@ -53,5 +53,6 @@
     "rehype-react": "^8.0.0",
     "typescript": "^5",
     "unified": "^11.0.5"
-  }
+  },
+  "packageManager": "pnpm@9.6.0"
 }
