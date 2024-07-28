@@ -82,6 +82,7 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
           secrets: NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }}
+          platforms: linux/arm64
 
       # Sign the resulting Docker image digest except on PRs.
       # This will only write to the public Rekor transparency log when the Docker
