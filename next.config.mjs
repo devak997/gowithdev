@@ -1,13 +1,15 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: "standalone",
-  optimizePackageImports: [
-    "@mantine/core",
-    "@mantine/hooks",
-    "@mantine/notifications",
-    "@mantine/tiptap",
-    "@mantine/code-highlight",
-  ],
+  experimental: {
+    optimizePackageImports: [
+      "@mantine/core",
+      "@mantine/hooks",
+      "@mantine/notifications",
+      "@mantine/tiptap",
+      "@mantine/code-highlight",
+    ],
+  },
   ...(process.env.NODE_ENV !== "production" && {
     cacheMaxMemorySize: 0,
   }),
