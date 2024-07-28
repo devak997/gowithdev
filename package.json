@@ -43,7 +43,7 @@
     "@typescript-eslint/eslint-plugin": "^7.17.0",
     "eslint": "^8",
     "eslint-config-next": "14.2.5",
-    "eslint-plugin-perfectionist": "^3.0.0",
+    "eslint-plugin-perfectionist": "^2.11.0",
     "eslint-plugin-sonarjs": "^1.0.4",
     "eslint-plugin-unicorn": "^55.0.0",
     "postcss": "^8.4.40",
