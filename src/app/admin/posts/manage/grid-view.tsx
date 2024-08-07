@@ -18,7 +18,14 @@ interface Props {
 
 const GridView = ({ posts }: Readonly<Props>) => {
   return (
-    <SimpleGrid cols={3} pb="xl">
+    <SimpleGrid
+      cols={{
+        lg: 4,
+        md: 3,
+        xs: 1,
+      }}
+      pb="xl"
+    >
       {posts.map((post) => (
         <Card key={post.id} padding="lg" radius="md" shadow="sm" withBorder>
           <CardSection>

@@ -19,7 +19,7 @@ export default async function Home() {
     <Box>
       <Box className={styles.hero} mb="lg" p={48}>
         <Center>
-          <Title ff="monospace" mb="md" order={1} size={80}>
+          <Title ff="monospace" mb="md" order={1} size={62}>
             gowithdev
           </Title>
         </Center>
@@ -35,7 +35,14 @@ export default async function Home() {
             See more
           </Anchor>
         </Title>
-        <SimpleGrid cols={4} pb="xl">
+        <SimpleGrid
+          cols={{
+            lg: 4,
+            md: 3,
+            xs: 1,
+          }}
+          pb="xl"
+        >
           {posts.map((post) => (
             <PostCard key={post.id} post={post} />
           ))}

@@ -21,7 +21,13 @@ const PostsPage = async () => {
       <Title mb="sm" order={1} size="h2">
         Posts
       </Title>
-      <SimpleGrid cols={3} pb="xl">
+      <SimpleGrid
+        cols={{
+          md: 3,
+          xs: 1,
+        }}
+        pb="xl"
+      >
         {posts.map((post) => (
           <PostCard key={post.id} post={post} />
         ))}

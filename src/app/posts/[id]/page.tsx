@@ -40,7 +40,7 @@ const PostPage: React.FC<Props> = async ({ params: { id } }) => {
   const post = await getPost(id);
 
   return (
-    <Container pt="md" >
+    <Container pt="md">
       <BreadcrumbsComponent items={breadcrumbs} />
       <Title mb="md" order={1}>
         {post.title}

@@ -43,7 +43,8 @@ const getPostsView = (view: "grid" | "list", posts: Post[]) => {
 };
 
 const PostsView = ({ posts }: Readonly<PostsViewProps>) => {
-  const [view, setView] = useState<"grid" | "list">("list");
+  const isMobile = window.matchMedia("(max-width: 600px)").matches;
+  const [view, setView] = useState<"grid" | "list">(isMobile ? "grid" : "list");
   return (
     <Container
       h="calc(100dvh - var(--app-shell-header-height, 0px) - var(--app-shell-footer-height, 0px))"

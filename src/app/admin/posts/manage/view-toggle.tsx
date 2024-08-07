@@ -1,6 +1,8 @@
 import { SegmentedControl, VisuallyHidden, rem } from "@mantine/core";
 import { IconGridDots, IconListDetails } from "@tabler/icons-react";
 
+import styles from "./view-toggle.module.css";
+
 interface Props {
   onChange(value: "grid" | "list"): void;
   value: "grid" | "list";
@@ -14,6 +16,7 @@ const ViewToggle = ({ onChange, value }: Readonly<Props>) => {
 
   return (
     <SegmentedControl
+      className={styles.toggle}
       data={[
         {
           label: (
