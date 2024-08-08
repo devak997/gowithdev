@@ -11,7 +11,7 @@ import {
 } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import GridView from "./grid-view";
 import TableView from "./list-view";
@@ -43,8 +43,13 @@ const getPostsView = (view: "grid" | "list", posts: Post[]) => {
 };
 
 const PostsView = ({ posts }: Readonly<PostsViewProps>) => {
-  const isMobile = window.matchMedia("(max-width: 600px)").matches;
+  const [isMobile, setIsMobile] = useState(false);
   const [view, setView] = useState<"grid" | "list">(isMobile ? "grid" : "list");
+
+  useEffect(() => {
+    setIsMobile(window.matchMedia("(max-width: 600px)").matches);
+  }, []);
+
   return (
     <Container
       h="calc(100dvh - var(--app-shell-header-height, 0px) - var(--app-shell-footer-height, 0px))"
