@@ -1,7 +1,7 @@
 .hero {
 
+    border-bottom: 1px solid var(--mantine-color-default-border);
     background-image: url("/dominos.svg");
-
     [data-mantine-color-scheme="dark"] & {
         color: rgba(255, 255, 255);
         background-color: rgba(0, 17, 34, .8);

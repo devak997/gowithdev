@@ -20,7 +20,6 @@ const GridView = ({ posts }: Readonly<Props>) => {
   return (
     <SimpleGrid
       cols={{
-        lg: 4,
         md: 3,
         xs: 1,
       }}
